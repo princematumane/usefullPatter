@@ -1,0 +1,20 @@
+YourApplication/
+├── Core/
+│   ├── Entities/            # Domain models
+│   ├── Interfaces/          # Repository and service contracts
+│   ├── Utilities/
+│   │   └── Results/         # Result pattern implementation
+│   └── Exceptions/          # Custom exceptions
+├── Infrastructure/
+│   ├── Repositories/        # Data access implementations
+│   └── Services/           # External service integrations
+├── Application/
+│   ├── DTOs/               # Data transfer objects
+│   ├── Mappings/           # AutoMapper profiles
+│   ├── Services/           # Business logic
+│   └── Validators/         # FluentValidation rules
+├── API/
+│   ├── Controllers/        # API endpoints
+│   ├── Filters/            # Exception filters
+│   └── Middleware/         # Global error handling
+└── Tests/                  # Unit and integration tests
