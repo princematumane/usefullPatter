@@ -33,4 +33,33 @@ public static class EventBusExtensions
 
         return app;
     }
+
+    public static IServiceCollection AddEventHandlers(this IServiceCollection services)
+{
+    var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+        .Where(a => !a.IsDynamic && !a.FullName!.StartsWith("System") && !a.FullName.StartsWith("Microsoft"));
+    
+    foreach (var assembly in assemblies)
+    {
+        var handlerTypes = assembly.GetTypes()
+            .Where(t => t is { IsClass: true, IsAbstract: false } &&
+                       t.GetInterfaces().Any(i => 
+                           i.IsGenericType && 
+                           i.GetGenericTypeDefinition() == typeof(IEventHandler<>)));
+
+        foreach (var type in handlerTypes)
+        {
+            var interfaces = type.GetInterfaces()
+                .Where(i => i.IsGenericType && 
+                           i.GetGenericTypeDefinition() == typeof(IEventHandler<>));
+
+            foreach (var interfaceType in interfaces)
+            {
+                services.AddScoped(interfaceType, type);
+            }
+        }
+    }
+
+    return services;
+}
 }
